@@ -1,11 +1,13 @@
 import java.util.*;
+import java.io.BufferedReader;  
+import java.io.FileReader;  
+import java.io.IOException;  
 
 public class strings{
 
     static Scanner teclado = new Scanner(System.in);
     public static void main(String[]args){
-        int control = 0;
-        int resultadoPalindromos = 0;
+        int control = 0;        
         int opcion = 0;
         while(control == 0){
             System.out.print("Bienvenido\n1.Contador de letras\n2.Verificador de Palindromos\n3.Salir\nSeleccione una opcion: ");
@@ -16,13 +18,7 @@ public class strings{
                     contar();
                     break;
                 case 2:
-                    resultadoPalindromos = palindromos();
-                    if (resultadoPalindromos == 0){
-                        System.out.println("El texto ingresado no es palindromo");
-                    }
-                    else if(resultadoPalindromos == 1){
-                        System.out.println("El texto ingresado es palindromo");
-                    }
+                    palindromos();
                     break;
                 case 3:
                     System.out.println("Gracias por utilizar este programa ;)");
@@ -74,29 +70,42 @@ public class strings{
         }
     }
 
-    public static int palindromos(){
+    public static void palindromos(){
         String nuevaCadena = "";
         String cadenaInvertida = "";
-        String cadena = "";
-        System.out.println("Ingrese el texto que quiere comprobar si es palindromo: ");
-        cadena = teclado.nextLine();
-        cadena = cadena.toLowerCase();
-        for (int x = 0; x <= (cadena.length()-1); x++){
-            if (cadena.charAt(x) != ' '){
-                nuevaCadena += cadena.charAt(x);
-            }
-        }
-        for (int x = (cadena.length()-1); x >= 0; x--){
-            if (cadena.charAt(x) != ' '){
-                cadenaInvertida += cadena.charAt(x);
-            }
-        }
-        if (nuevaCadena.equals(cadenaInvertida)){
-            return 1;
-        }
-        else{
-            return 0;
-        }
+        int contador = 0;
+        String line = "";  
+        String splitBy = ",";  
+        try{  
+            BufferedReader br = new BufferedReader(new FileReader("palindromos.csv"));  
+            while ((line = br.readLine()) != null){  
+                String[] palabras = line.split(splitBy);
+                while (contador < palabras.length){
+                    for (int x = 0; x <= (palabras[contador].length()-1); x++){
+                        if (palabras[contador].charAt(x) != ' ' || palabras[contador].charAt(x) != ','){
+                            nuevaCadena += palabras[contador].charAt(x);
+                        }
+                    }
+                    for (int x = (palabras[contador].length()-1); x >= 0; x--){
+                        if (palabras[contador].charAt(x) != ' ' || palabras[contador].charAt(x) != ','){
+                            cadenaInvertida += palabras[contador].charAt(x);
+                        }
+                    }
+                    if (nuevaCadena.equals(cadenaInvertida)){
+                        System.out.println(palabras[contador] + " es palindromo");
+                    }
+                    else{
+                        System.out.println(palabras[contador] + " no es palindromo");
+                    }  
+                    contador++;
+                    cadenaInvertida = "";
+                    nuevaCadena = "";
+                }
+            }  
+        }   
+        catch (IOException e){  
+            e.printStackTrace();  
+        }  
     }
 
     public static void imprimirAsteriscos(int cantidad){
