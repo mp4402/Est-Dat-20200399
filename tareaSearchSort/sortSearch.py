@@ -53,6 +53,7 @@ def linearSearch(valor):
             print("Valor encontrado")
             break
         contadorPosiciones1 += 1
+        sleep(1)
     if contadorPosiciones1 == len(lista):
         print("No se encontro el valor")
             
